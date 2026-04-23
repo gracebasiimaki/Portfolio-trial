@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Basiimaki Grace — Timetables</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #f7f8fa;
+      --panel: #ffffff;
+      --border: #333;
+      --accent: #3366cc;
+      --accent2: #5a82d8;
+      --dim: #666;
+      --text: #222;
+      --page-pad: 18px;
+      --max-w: 900px;
+    }
+
+    body {
+      background: var(--bg);
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      min-height: 100vh;
+      padding-bottom: 60px;
+    }
+
+    .top-stripe, .bottom-stripe {
+      height: 3px;
+      background: var(--accent);
+    }
+
+    .page-hero {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 28px var(--page-pad) 20px;
+      text-align: center;
+    }
+
+    .page-title {
+      font-size: clamp(1.15rem, 3vw, 1.8rem);
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 1px;
+    }
+
+    .page-subtitle {
+      font-size: 0.9rem;
+      color: var(--dim);
+      margin-top: 10px;
+    }
+
+    .divider {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 var(--page-pad);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .divider-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .divider-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    .table-block {
+      max-width: var(--max-w);
+      margin: 18px auto 0;
+      padding: 0 var(--page-pad);
+    }
+
+    .table-number {
+      font-size: 0.85rem;
+      color: var(--accent2);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+    }
+
+    .table-number::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .table-scroll {
+      overflow-x: auto;
+    }
+
+    .tt {
+      width: 100%;
+      min-width: 380px;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      background: var(--panel);
+    }
+
+    .tt thead tr {
+      background: #fff;
+    }
+
+    .tt th {
+      font-size: 0.78rem;
+      color: #111;
+      padding: 8px 10px;
+      text-align: center;
+      font-weight: 700;
+      border: 1px solid var(--border);
+    }
+
+    .tt td {
+      padding: 10px 12px;
+      color: var(--text);
+      border: 1px solid var(--border);
+      text-align: center;
+      vertical-align: middle;
+      min-width: 80px;
+      height: 34px;
+    }
+
+    .tt tbody tr:hover {
+      background: #f8fbff;
+    }
+
+    .spanned {
+      background: #fff;
+    }
+
+    .note-cell {
+      background: #fff;
+      vertical-align: middle;
+      text-align: left;
+      padding: 8px 10px !important;
+    }
+
+    .note {
+      font-style: normal;
+      color: var(--text);
+      font-size: 0.82rem;
+      display: block;
+      line-height: 1.4;
+    }
+
+    .sep-col {
+      background: #fff;
+      border: 1px solid var(--border) !important;
+      width: 26px;
+      min-width: 26px;
+      padding: 0 !important;
+    }
+
+    .sep-th {
+      background: #fff !important;
+      border: 1px solid var(--border) !important;
+      width: 26px;
+      min-width: 26px;
+      padding: 0 !important;
+    }
+
+    .sep-text {
+      writing-mode: vertical-rl;
+      text-orientation: upright;
+      transform: none;
+      font-size: 0.62rem;
+      letter-spacing: 0;
+      color: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      font-weight: 700;
+      line-height: 1;
+      padding: 6px 0;
+    }
+
+    .btn-wrap {
+      max-width: var(--max-w);
+      margin: 40px auto 0;
+      padding: 0 var(--page-pad);
+      display: flex;
+      justify-content: center;
+    }
+
+    .btn-profile {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 15px 36px;
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      text-decoration: none;
+      font-size: 0.8rem;
+      color: var(--accent);
+      background: rgba(51, 102, 204, 0.04);
+      font-weight: 700;
+    }
+
+    footer {
+      margin-top: 48px;
+      border-top: 1px solid var(--border);
+      background: var(--panel);
+      padding: 20px var(--page-pad) 32px;
+    }
+
+    .footer-copy {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      text-align: center;
+      font-size: 0.72rem;
+      color: var(--dim);
+      text-transform: uppercase;
+    }
+
+    .footer-copy span {
+      color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <div class="top-stripe"></div>
+
+  <div class="page-hero">
+    <div class="page-title">COURSE TIMETABLES</div>
+    <div class="page-subtitle">Basiimaki Grace · BITC Year 2 · Kyambogo University</div>
+  </div>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-label">i. My First Table</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="table-block">
+    <div class="table-scroll">
+      <table class="tt">
+        <thead>
+          <tr>
+            <th>Monday</th>
+            <th>Tuesday</th>
+            <th>Wednesday</th>
+            <th>Thursday</th>
+            <th>Friday</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>SCS101</td>
+            <td>SCS104</td>
+            <td>SCS105</td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td>SCS104</td>
+            <td></td>
+            <td>SCS105</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>SCS101</td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>SCS101</td>
+            <td></td>
+            <td></td>
+            <td>SCS102</td>
+            <td>SCS102</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="divider" style="margin-top:28px;">
+    <div class="divider-line"></div>
+    <div class="divider-label">b. My Second Table</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="table-block">
+    <div class="table-scroll">
+      <table class="tt">
+        <thead>
+          <tr>
+            <th>Monday</th>
+            <th>Tuesday</th>
+            <th>Wednesday</th>
+            <th>Thursday</th>
+            <th>Friday</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td rowspan="3" class="spanned">SCS101</td>
+            <td rowspan="2" class="spanned">SCS104</td>
+            <td>SCS105</td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>SCS104</td>
+            <td></td>
+            <td>SCS105</td>
+          </tr>
+          <tr>
+            <td>SCS101</td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>SCS101</td>
+            <td></td>
+            <td></td>
+            <td>SCS102</td>
+            <td>SCS102</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="divider" style="margin-top:28px;">
+    <div class="divider-line"></div>
+    <div class="divider-label">c. My Third Table</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="table-block">
+    <div class="table-scroll">
+      <table class="tt">
+        <thead>
+          <tr>
+            <th>Monday</th>
+            <th>Tuesday</th>
+            <th>Wednesday</th>
+            <th>Thursday</th>
+            <th>Friday</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>SCS101</td>
+            <td>SCS104</td>
+            <td>SCS105</td>
+            <td rowspan="2" class="note-cell">
+              <span class="note">i. Eat</span>
+              <span class="note">ii. Sleep</span>
+            </td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td>SCS104</td>
+            <td>SCS105</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>SCS101</td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>SCS101</td>
+            <td></td>
+            <td></td>
+            <td>SCS102</td>
+            <td>SCS102</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="divider" style="margin-top:28px;">
+    <div class="divider-line"></div>
+    <div class="divider-label">d. My Forth Table</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="table-block">
+    <div class="table-scroll">
+      <table class="tt">
+        <thead>
+<tr>
+<th>Monday</th><th>Tuesday</th><th></th><th>Wednesday</th><th></th><th>Thursday</th><th>Friday</th></tr><tr><td>SCS101</td><td>SCS104</td><td rowspan="2">B<br>R<br>E<br>A<br>K</td><td>SCS105</td><td rowspan="2">L<br>U<br>N<br>C<br>H</td><td>SCS102</td><td></td></tr><tr><td>SCS111</td><td></td><td>SCS104</td><td></td><td>SCS105</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="btn-wrap">
+    <a class="btn-profile" href="profile.html">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="8" r="4"></circle>
+        <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"></path>
+      </svg>
+      More About Me
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h14M13 6l6 6-6 6"></path>
+      </svg>
+    </a>
+  </div>
+
+  <footer>
+    <p class="footer-copy">Designed &amp; Built by <span>His Grace Web Solutions</span> &bull; Uganda &bull; 2026</p>
+  </footer>
+
+  <div class="bottom-stripe"></div>
+</body>
+</html>

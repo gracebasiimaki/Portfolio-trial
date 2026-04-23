@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Basiimaki Grace — Profile</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f7f8fa;
+      --panel: #ffffff;
+      --border: #d8dde6;
+      --accent: #3366cc;
+      --accent2: #5a82d8;
+      --dim: #667085;
+      --text: #1f2937;
+      --page-pad: 18px;
+      --max-w: 900px;
+    }
+
+    body {
+      background: var(--bg);
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .top-stripe, .bottom-stripe {
+      height: 3px;
+      background: var(--accent);
+    }
+
+    header {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 28px var(--page-pad) 24px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 480px) {
+      header { flex-direction: column; text-align: center; }
+      .tag-row { justify-content: center; }
+    }
+
+    .photo-ring {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      border: 2px solid var(--accent);
+      overflow: hidden;
+      background: var(--panel);
+    }
+
+    .photo-ring img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .photo-fallback {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      color: var(--dim);
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+
+    .hero-info { flex: 1; min-width: 200px; }
+
+    .hero-name {
+      font-size: clamp(1.3rem, 3vw, 2rem);
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1.2;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 12px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: 0.82rem;
+      color: var(--dim);
+      background: #fff;
+    }
+
+    .tag b { color: var(--accent); font-weight: 700; }
+
+    .tag-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .divider {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 var(--page-pad);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .divider-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .divider-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    .table-wrap {
+      max-width: var(--max-w);
+      margin: 18px auto 0;
+      padding: 0 var(--page-pad);
+      overflow-x: auto;
+    }
+
+    .styled-table {
+      width: 100%;
+      min-width: 300px;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      background: var(--panel);
+    }
+
+    .styled-table thead tr {
+      background: #edf2ff;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .styled-table th {
+      font-size: 0.78rem;
+      color: var(--accent);
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 700;
+    }
+
+    .styled-table td {
+      padding: 11px 14px;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+      line-height: 1.5;
+    }
+
+    .styled-table tbody tr:hover { background: #f8fbff; }
+
+    .styled-table td:first-child {
+      color: var(--accent2);
+      font-size: 0.78rem;
+      white-space: nowrap;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: 0.78rem;
+      color: var(--dim);
+      background: #fff;
+    }
+
+    .pill-cell {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 11px;
+      border: 1px solid #b7c7ea;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      color: var(--accent);
+      background: #eff4ff;
+    }
+
+    footer {
+      margin-top: 34px;
+      border-top: 1px solid var(--border);
+      background: var(--panel);
+      padding: 28px var(--page-pad) 24px;
+    }
+
+    .footer-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+
+    .footer-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--dim);
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .social-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    @media (max-width: 639px) {
+      .social-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 359px) {
+      .social-grid { grid-template-columns: 1fr; }
+    }
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 13px 14px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      text-decoration: none;
+      background: #fff;
+      width: 100%;
+      min-width: 0;
+    }
+
+    .social-icon {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+    }
+
+    .social-info {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .social-platform {
+      font-size: 0.72rem;
+      color: var(--dim);
+      font-weight: 700;
+    }
+
+    .social-handle {
+      font-size: 0.9rem;
+      color: var(--text);
+      margin-top: 4px;
+      overflow-wrap: break-word;
+      word-break: break-all;
+      white-space: normal;
+    }
+
+    .footer-copy {
+      text-align: center;
+      margin-top: 22px;
+      font-size: 0.72rem;
+      color: var(--dim);
+      text-transform: uppercase;
+    }
+
+    .footer-copy span { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <div class="top-stripe"></div>
+
+  <header>
+    <div class="photo-ring">
+      <img src="grace.jpg" alt="Basiimaki Grace"
+        onerror="this.style.display='none'; document.getElementById('ph').style.display='flex'">
+      <div id="ph" class="photo-fallback" style="display:none;">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".35">
+          <circle cx="12" cy="8" r="4"></circle>
+          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"></path>
+        </svg>
+        PHOTO
+      </div>
+    </div>
+
+    <div class="hero-info">
+      <div class="hero-name">BASIIMAKI GRACE</div>
+      <div class="tag-row">
+        <div class="tag"><span class="tag-dot"></span> Course: <b>Bachelor of Information Technology &amp; Computing</b></div>
+        <div class="tag"><span class="tag-dot"></span> Year: <b>Year 2 &bull; 2025 / 2026</b></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-label">Academic Background</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="table-wrap">
+    <table class="styled-table">
+      <thead>
+        <tr>
+          <th>Year</th>
+          <th>Institution</th>
+          <th>Background / Qualification</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2024 – Present</td>
+          <td>Kyambogo University</td>
+          <td><span class="badge">Bachelor in Information Technology and Computing (BITC)</span></td>
+        </tr>
+        <tr>
+          <td>2022 – 2023</td>
+          <td>Kigulu College Iganga</td>
+          <td><span class="badge">Uganda Advanced Certificate of Education (UACE)</span></td>
+        </tr>
+        <tr>
+          <td>2017 – 2021</td>
+          <td>Bright College</td>
+          <td><span class="badge">Uganda Certificate of Education (UCE)</span></td>
+        </tr>
+        <tr>
+          <td>2010 – 2016</td>
+          <td>St. Peter's Primary School</td>
+          <td><span class="badge">Primary Leaving Examination (PLE)</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="divider" style="margin-top:28px;">
+    <div class="divider-line"></div>
+    <div class="divider-label">Interests &amp; Hobbies</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="table-wrap">
+    <table class="styled-table">
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Tech &amp; Dev</td>
+          <td>
+            <div class="pill-cell">
+              <span class="pill">Web Development</span>
+              <span class="pill">Open Source</span>
+              <span class="pill">AI &amp; Machine Learning</span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>Creative</td>
+          <td>
+            <div class="pill-cell">
+              <span class="pill">Movies</span>
+              <span class="pill">Sports Highlights</span>
+              <span class="pill">Photography</span>
+              <span class="pill">Music</span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>Sports</td>
+          <td>
+            <div class="pill-cell">
+              <span class="pill">Football</span>
+              <span class="pill">Running</span>
+              <span class="pill">F1 Racing</span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>Reading</td>
+          <td>
+            <div class="pill-cell">
+              <span class="pill">Tech Blogs</span>
+              <span class="pill">Science Fiction</span>
+              <span class="pill">Novels</span>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <p class="footer-label">Connect With Me</p>
+      <div class="social-grid">
+        <a class="social-link" href="https://github.com/gracebasiimaki" target="_blank" rel="noopener">
+          <div class="social-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.58 2 12.26c0 4.54 2.87 8.39 6.84 9.75.5.09.68-.22.68-.49v-1.7c-2.78.62-3.37-1.37-3.37-1.37-.45-1.17-1.1-1.48-1.1-1.48-.9-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.56 2.33 1.11 2.9.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.06 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05A9.38 9.38 0 0 1 12 7.43c.85 0 1.71.12 2.51.34 1.9-1.33 2.74-1.05 2.74-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.93-2.34 4.8-4.57 5.05.36.32.68.94.68 1.9v2.82c0 .27.18.59.69.49A10.27 10.27 0 0 0 22 12.26C22 6.58 17.52 2 12 2z"></path>
+            </svg>
+          </div>
+          <div class="social-info">
+            <div class="social-platform">GitHub</div>
+            <div class="social-handle">@gracebasiimaki</div>
+          </div>
+        </a>
+
+        <a class="social-link" href="https://x.com/gbasiimaki" target="_blank" rel="noopener">
+          <div class="social-icon">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
+            </svg>
+          </div>
+          <div class="social-info">
+            <div class="social-platform">Twitter / X</div>
+            <div class="social-handle">@gbasiimaki</div>
+          </div>
+        </a>
+
+        <a class="social-link" href="https://www.linkedin.com/in/basiimaki-grace-514b883a8" target="_blank" rel="noopener">
+          <div class="social-icon">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"></path>
+              <circle cx="4" cy="4" r="2"></circle>
+            </svg>
+          </div>
+          <div class="social-info">
+            <div class="social-platform">LinkedIn</div>
+            <div class="social-handle">Basiimaki Grace</div>
+          </div>
+        </a>
+
+        <a class="social-link" href="https://www.instagram.com/gracemorganboss" target="_blank" rel="noopener">
+          <div class="social-icon">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <circle cx="12" cy="12" r="4"></circle>
+              <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"></circle>
+            </svg>
+          </div>
+          <div class="social-info">
+            <div class="social-platform">Instagram</div>
+            <div class="social-handle">@gracemorganboss</div>
+          </div>
+        </a>
+
+        <a class="social-link" href="https://wa.me/256707284487" target="_blank" rel="noopener">
+          <div class="social-icon">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"></path>
+              <path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.37 5.06L2 22l5.09-1.33A9.934 9.934 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.71 0-3.3-.46-4.68-1.26l-.34-.2-3.02.79.81-2.95-.22-.36A8 8 0 0 1 4 12c0-4.41 3.59-8 8-8s8 3.59 8 8-3.59 8-8 8z"></path>
+            </svg>
+          </div>
+          <div class="social-info">
+            <div class="social-platform">WhatsApp</div>
+            <div class="social-handle">+256 707 284 487</div>
+          </div>
+        </a>
+
+        <a class="social-link" href="mailto:gbasiimaki@gmail.com">
+          <div class="social-icon">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+              <polyline points="2,4 12,13 22,4"></polyline>
+            </svg>
+          </div>
+          <div class="social-info">
+            <div class="social-platform">Email</div>
+            <div class="social-handle">gbasiimaki@gmail.com</div>
+          </div>
+        </a>
+      </div>
+
+      <p class="footer-copy">Designed &amp; Built by <span>His Grace Web Solutions</span> &bull; Uganda &bull; 2026</p>
+    </div>
+  </footer>
+
+  <div class="bottom-stripe"></div>
+</body>
+</html>
